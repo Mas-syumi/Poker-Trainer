@@ -701,8 +701,9 @@ function choose(action){
   const prob=probMap[hColor]||0;
   if(isVsRaise){
     const raiserThr=getRaiserThreshold(currentPos.raiser, gameMode, currentPos.seats);
+    const fourBetHint=currentPos.name==='BB' ? '　4ベット: '+(raiserThr-2)+'番以上' : '';
     let hintTxt=colorLabel[hColor]+' '+hRankAdj+'/'+maxRank+'番目（'+prob+'%）'
-      +' / '+currentPos.raiser+'基準: '+raiserThr+'番　コール: '+(raiserThr-1)+'番　4ベット: '+(raiserThr-2)+'番以上';
+      +' / '+currentPos.raiser+'基準: '+raiserThr+'番　コール: '+(raiserThr-1)+'番'+fourBetHint;
     if(currentPos.name==='BB' && currentPos.raiser==='BTN'){
       const bbCallColor=gameMode==='tourn'?'tpink':'redbox';
       const bbCallLabel=gameMode==='tourn'?'桃':'赤枠';
