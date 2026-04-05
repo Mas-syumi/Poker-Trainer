@@ -6,6 +6,37 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>ポーカー道場</title>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getDatabase, ref, get, set } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBucKzs6id284kMbtd2Mta1lTkOHouR7Qs",
+    authDomain: "pokergame-381c8.firebaseapp.com",
+    databaseURL: "https://pokergame-381c8-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "pokergame-381c8",
+    storageBucket: "pokergame-381c8.firebasestorage.app",
+    messagingSenderId: "31514265498",
+    appId: "1:31514265498:web:e53faab35cc9cc4e261c23"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Firebase読み書き関数をグローバルに公開
+  window._fbGet = async (key) => {
+    try {
+      const snap = await get(ref(db, 'poker_dojo/' + key));
+      return snap.exists() ? snap.val() : null;
+    } catch(e) { return null; }
+  };
+  window._fbSet = async (key, val) => {
+    try { await set(ref(db, 'poker_dojo/' + key), val); } catch(e) {}
+  };
+
+  window._firebaseReady = true;
+  window.dispatchEvent(new Event('firebase-ready'));
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -688,13 +719,44 @@ function miniCard(r,s,col){
 }
 
 // =================================================================
-// LOCAL STORAGE STATS
+// STATS（Firebase + localStorageキャッシュ）
 // =================================================================
-function loadStats(key){
-  try{const s=localStorage.getItem(key);return s?JSON.parse(s):{total:0,correct:0,wrong:0,streak:0,best:0};}
-  catch(e){return{total:0,correct:0,wrong:0,streak:0,best:0};}
+const STAT_KEYS=['pf_ring','pf_tourn','chip','showdown'];
+let _statsCache={};
+
+// 初期値
+function _emptyStats(){return{total:0,correct:0,wrong:0,streak:0,best:0};}
+
+// localStorageから読む（即時）
+function _lsGet(key){
+  try{const s=localStorage.getItem('pd_'+key);return s?JSON.parse(s):_emptyStats();}
+  catch(e){return _emptyStats();}
 }
-function saveStats(key,st){try{localStorage.setItem(key,JSON.stringify(st));}catch(e){}}
+function _lsSet(key,st){
+  try{localStorage.setItem('pd_'+key,JSON.stringify(st));}catch(e){}
+}
+
+// Firebase全キー一括取得（起動時）
+async function loadAllStatsFromFirebase(){
+  for(const key of STAT_KEYS){
+    const remote=await window._fbGet(key);
+    if(remote){
+      _statsCache[key]=remote;
+      _lsSet(key,remote);
+    } else {
+      _statsCache[key]=_lsGet(key);
+    }
+  }
+}
+
+function loadStats(key){
+  return _statsCache[key]||_lsGet(key)||_emptyStats();
+}
+function saveStats(key,st){
+  _statsCache[key]=st;
+  _lsSet(key,st);
+  if(window._fbSet) window._fbSet(key,st);
+}
 function recordResult(key,ok){
   const st=loadStats(key);
   st.total++;
@@ -707,9 +769,9 @@ function renderStatBlock(prefix,st){
   const pct=st.total>0?Math.round(st.correct/st.total*100):0;
   const set=(id,v)=>{const el=document.getElementById(prefix+id);if(el)el.textContent=v;};
   const setW=(id,w)=>{const el=document.getElementById(prefix+id);if(el)el.style.width=w;};
-  set('st-total',st.total); set('st-correct',st.correct); set('st-wrong',st.wrong);
-  set('st-pct',st.total>0?pct+'%':'—'); setW('pct-bar',pct+'%');
-  set('st-streak',st.streak); set('st-best',st.best);
+  set('st-total',st.total);set('st-correct',st.correct);set('st-wrong',st.wrong);
+  set('st-pct',st.total>0?pct+'%':'—');setW('pct-bar',pct+'%');
+  set('st-streak',st.streak);set('st-best',st.best);
 }
 
 // =================================================================
@@ -1339,7 +1401,20 @@ document.addEventListener('keydown',e=>{
 // =================================================================
 // INIT
 // =================================================================
-buildHandRankRef('hand-rank-ref');
+async function init(){
+  // localStorageから即時ロード（表示を先に出す）
+  for(const key of STAT_KEYS) _statsCache[key]=_lsGet(key);
+  buildHandRankRef('hand-rank-ref');
+  // Firebaseの準備ができたらリモートデータで上書き
+  if(window._firebaseReady){
+    await loadAllStatsFromFirebase();
+  } else {
+    window.addEventListener('firebase-ready', async ()=>{
+      await loadAllStatsFromFirebase();
+    });
+  }
+}
+init();
 </script>
 </body>
 </html>
