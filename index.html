@@ -20,7 +20,7 @@
   --wrong: #e05555;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; }
+html, body { height: 100%; background: #0f2218; }
 body {
   font-family: 'Noto Sans JP', sans-serif;
   background: #0f2218;
@@ -120,7 +120,7 @@ body {
 .tag-suited { background: rgba(120,76,175,0.2); color: #b39de0; }
 .tag-off    { background: rgba(138,171,150,0.2); color: var(--muted); }
 
-.action-area { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.action-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 .action-btn {
   padding: 12px 8px; border-radius: 12px; border: 1.5px solid;
   background: transparent; font-family: 'Noto Sans JP', sans-serif;
@@ -129,14 +129,16 @@ body {
   transition: transform 0.1s, background 0.15s;
 }
 .action-btn:active { transform: scale(0.94); }
-.btn-raise { border-color: #c9a84c; color: var(--gold); }
-.btn-raise:active { background: rgba(201,168,76,0.2); }
+.btn-reraise { border-color: #cc88cc; color: #cc88cc; }
+.btn-reraise:active { background: rgba(200,100,200,0.2); }
+.btn-4bet { border-color: #ff6688; color: #ff6688; }
+.btn-4bet:active { background: rgba(255,100,136,0.2); }
 .btn-call  { border-color: #3a7a5a; color: #6fcf97; }
 .btn-call:active  { background: rgba(58,122,90,0.2); }
 .btn-fold  { border-color: #6b3a3a; color: #e07777; }
 .btn-fold:active  { background: rgba(107,58,58,0.2); }
-.btn-raise.selected { background: rgba(201,168,76,0.2); box-shadow: 0 0 0 2px var(--gold); }
 .btn-reraise.selected { background: rgba(200,100,200,0.25); box-shadow: 0 0 0 2px #cc88cc; }
+.btn-4bet.selected { background: rgba(255,100,136,0.2); box-shadow: 0 0 0 2px #ff6688; }
 .btn-call.selected  { background: rgba(58,122,90,0.2);  box-shadow: 0 0 0 2px #3a7a5a; }
 .btn-fold.selected  { background: rgba(107,58,58,0.2);  box-shadow: 0 0 0 2px #6b3a3a; }
 
@@ -175,7 +177,7 @@ body {
 .next-btn.visible { display: block; animation: fadeIn 0.3s ease; }
 
 /* STATS */
-.stats-section { padding-bottom: 24px; }
+.stats-section { padding-bottom: 24px; background: #0f2218; position: relative; z-index: 1; }
 .section-title { font-size: 12px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .stat-card {
@@ -196,18 +198,18 @@ body {
 }
 .reset-btn {
   width: 100%; padding: 16px; border-radius: 12px;
-  border: 0.5px solid rgba(224,85,85,0.4); background: transparent; color: #e07777;
-  font-family: 'Noto Sans JP', sans-serif; font-size: 14px; cursor: pointer;
+  border: none; background: #cc4466; color: #ffffff;
+  font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer;
   touch-action: manipulation; -webkit-appearance: none; margin-top: 8px;
 }
-.reset-btn:active { background: rgba(224,85,85,0.1); }
+.reset-btn:active { background: #aa2244; }
 
 /* RANGE TABLE */
 .leg-item { display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.2); border-radius:6px; padding:4px 10px; white-space:nowrap; overflow:hidden; }
 .leg-sq { width:18px; height:18px; border-radius:3px; flex-shrink:0; }
 .leg-txt { font-size:11px; color:var(--text); display:flex; align-items:center; gap:4px; white-space:nowrap; }
 .leg-num { font-family:'DM Mono',monospace; font-size:10px; background:rgba(255,255,255,0.15); border-radius:3px; padding:1px 4px; color:var(--gold); font-weight:500; }
-.range-section { padding-bottom: 24px; }
+.range-section { padding-bottom: 24px; background: #0f2218; position: relative; z-index: 1; }
 .legend-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap; }
 .leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
 .leg-sq { width: 12px; height: 12px; border-radius: 2px; }
@@ -237,8 +239,8 @@ body {
 <div class="felt-texture"></div>
 <div class="container">
   <div class="top-wrap">
-    <div class="logo">PREFLOP 道場</div>
-    <div class="subtitle">ヨコサワ流ハンドレンジ</div>
+    <div class="logo">プリフロップ道場</div>
+    <div class="subtitle">ヨコサワのハンドレンジ表をマスター！</div>
     <div class="mode-bar" style="margin:6px 0 0;">
       <button class="mode-btn active" id="mode-ring" onclick="setMode('ring',this)">リング</button>
       <button class="mode-btn" id="mode-tourn" onclick="setMode('tourn',this)">トーナメント</button>
@@ -255,7 +257,7 @@ body {
     <div class="score-bar">
       <div class="score-item"><div class="score-num" id="s-round">1</div><div class="score-label">ラウンド</div></div>
       <div class="score-item"><div class="score-num green" id="s-correct">0</div><div class="score-label">正解</div></div>
-      <div class="score-item"><div class="score-num red" id="s-wrong">0</div><div class="score-label">ミス</div></div>
+      <div class="score-item"><div class="score-num" id="s-wrong" style="color:#c9a84c">0</div><div class="score-label">ミス</div></div>
     </div>
     <div style="text-align:center;margin-bottom:6px;">
       <span class="position-name" id="pos-after">5人</span>
@@ -267,10 +269,11 @@ body {
     <div class="cards-area" id="cards-area"></div>
     <div class="hand-label" id="hand-label"></div>
     <div class="hand-name" id="hand-name"></div>
-    <div class="action-area" style="grid-template-columns:1fr 1fr;">
-      <button id="btn-raise" class="action-btn btn-raise" onclick="choose('raise')">レイズ</button>
-      <button id="btn-call"  class="action-btn btn-call"  onclick="choose('call')"  style="display:none">コール</button>
-      <button id="btn-fold"  class="action-btn btn-fold"  onclick="choose('fold')">フォールド</button>
+    <div class="action-area" id="action-area" style="grid-template-columns:1fr 1fr;">
+      <button id="btn-fold"    class="action-btn btn-fold"    onclick="choose('fold')">フォールド</button>
+      <button id="btn-call"    class="action-btn btn-call"    onclick="choose('call')">コール</button>
+      <button id="btn-3bet"    class="action-btn btn-reraise" onclick="choose('3bet')">3ベット</button>
+      <button id="btn-4bet"    class="action-btn btn-4bet"    onclick="choose('4bet')">4ベット</button>
     </div>
     <div class="result-area" id="result-area">
       <div class="result-icon" id="result-icon"></div>
@@ -288,7 +291,7 @@ body {
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-big" id="st-total">0</div><div class="stat-lbl">総問数</div></div>
       <div class="stat-card"><div class="stat-big green" id="st-correct">0</div><div class="stat-lbl">正解</div></div>
-      <div class="stat-card"><div class="stat-big red" id="st-wrong">0</div><div class="stat-lbl">ミス</div></div>
+      <div class="stat-card"><div class="stat-big" id="st-wrong" style="color:var(--gold)">0</div><div class="stat-lbl">ミス</div></div>
       <div class="stat-card"><div class="stat-big" id="st-pct">—</div><div class="stat-lbl">正解率</div></div>
       <div class="stat-card full">
         <div class="stat-lbl" style="margin-bottom:6px">正解率バー</div>
@@ -339,28 +342,45 @@ function getAfter(seats, myPos){
   const idx=seats.indexOf(myPos);
   return seats.length - 1 - idx;
 }
-// ランダムにテーブル人数とポジションを選ぶ（BBは問題にならないので除外）
+// ポジションの行動順（早い順）
+const ACT_ORDER=['UTG','UTG+1','UTG+2','LJ','HJ','CO','BTN','SB','BB'];
+
+// ランダムにテーブル人数とポジションを選ぶ
 function randomPos(){
   const n=3+Math.floor(Math.random()*7); // 3〜9
   const seats=TABLE_CONFIGS[n];
+  const rnd=Math.random();
 
-  // 10%の確率でBBシナリオ
-  if(Math.random()<0.1 && n>=3){
-    // BBとして出題：レイザーをランダムに選ぶ
-    // レイザー候補: CO or BTN
-    const raisers=seats.filter(s=>s==='CO'||s==='BTN');
-    if(raisers.length>0){
-      const raiser=raisers[Math.floor(Math.random()*raisers.length)];
-      const after=getAfter(seats,'BB');
-      return {name:'BB',after:after,tableSize:n,seats:seats,raiser:raiser};
+  // 25%の確率でvsレイズ場面（BBシナリオ含む拡張版）
+  if(rnd<0.25 && n>=4){
+    // レイザー候補：自分より前のポジション
+    // 「レイザー」と「自分」のペアをランダムに選ぶ
+    const nonBlinds=seats.filter(s=>s!=='SB'&&s!=='BB');
+    // レイザーは最低2人いる卓で実施
+    if(nonBlinds.length>=2){
+      // raisers: BTN以外の非ブラインド（BTNはコール者の前提で使いにくいので含める）
+      const raiserIdx=Math.floor(Math.random()*(nonBlinds.length-1)); // 最後のBTN以外
+      const raiser=nonBlinds[raiserIdx];
+      // 自分: レイザーより後のポジション（BB含む）
+      const raiserSeatIdx=seats.indexOf(raiser);
+      const afterRaiser=seats.slice(raiserSeatIdx+1); // レイザーより後ろ
+      const callerCandidates=afterRaiser.filter(s=>s!=='SB'); // SBは除外（複雑なので）
+      if(callerCandidates.length===0) return randomPosNormal(n,seats);
+      const myPos=callerCandidates[Math.floor(Math.random()*callerCandidates.length)];
+      const after=getAfter(seats,myPos);
+      return {name:myPos,after:after,tableSize:n,seats:seats,raiser:raiser,scenario:'vsraise'};
     }
   }
 
+  return randomPosNormal(n,seats);
+}
+
+function randomPosNormal(n,seats){
   // 通常: SB/BBは除外
   const candidates=seats.filter(s=>s!=='BB'&&s!=='SB');
   const name=candidates[Math.floor(Math.random()*candidates.length)];
   const after=getAfter(seats,name);
-  return {name:name,after:after,tableSize:n,seats:seats,raiser:null};
+  return {name:name,after:after,tableSize:n,seats:seats,raiser:null,scenario:'open'};
 }
 // トーナメント用レンジ（リングから1ランク下げた近似版）
 const tournRangeColor={'22': 'lblue', '33': 'lblue', '44': 'lblue', '55': 'lgreen', '66': 'lgreen', '77': 'tyellow', '88': 'tyellow', '99': 'red', 'AA': 'purple', 'KK': 'purple', 'QQ': 'purple', 'JJ': 'red', 'TT': 'red', 'AKs': 'purple', 'AQs': 'red', 'AJs': 'red', 'ATs': 'red', 'A9s': 'lgreen', 'A8s': 'lgreen', 'A7s': 'lgreen', 'A6s': 'lgreen', 'A5s': 'lgreen', 'A4s': 'lgreen', 'A3s': 'lgreen', 'A2s': 'lgreen', 'KQs': 'red', 'KJs': 'tyellow', 'KTs': 'lgreen', 'K9s': 'lgreen', 'K8s': 'white', 'K7s': 'white', 'K6s': 'white', 'K5s': 'white', 'K4s': 'white', 'K3s': 'white', 'K2s': 'white', 'QJs': 'tyellow', 'QTs': 'lgreen', 'Q9s': 'lblue', 'Q8s': 'white', 'Q7s': 'white', 'Q6s': 'white', 'Q5s': 'redbox', 'Q4s': 'redbox', 'Q3s': 'redbox', 'Q2s': 'redbox', 'JTs': 'tyellow', 'J9s': 'lblue', 'J8s': 'white', 'J7s': 'white', 'J6s': 'redbox', 'J5s': 'tpink', 'J4s': 'tpink', 'J3s': 'tpink', 'J2s': 'tpink', 'T9s': 'lgreen', 'T8s': 'lblue', 'T7s': 'redbox', 'T6s': 'tpink', 'T5s': 'tpink', 'T4s': 'fold', 'T3s': 'fold', 'T2s': 'fold', '98s': 'lblue', '97s': 'white', '96s': 'redbox', '95s': 'tpink', '94s': 'fold', '93s': 'fold', '92s': 'fold', '87s': 'white', '86s': 'redbox', '85s': 'tpink', '84s': 'fold', '83s': 'fold', '82s': 'fold', '76s': 'white', '75s': 'redbox', '74s': 'tpink', '73s': 'fold', '72s': 'fold', '65s': 'white', '64s': 'redbox', '63s': 'tpink', '62s': 'fold', '54s': 'redbox', '53s': 'tpink', '52s': 'fold', '43s': 'tpink', '42s': 'fold', '32s': 'fold', 'AKo': 'purple', 'AQo': 'red', 'AJo': 'tyellow', 'ATo': 'lgreen', 'A9o': 'lblue', 'A8o': 'white', 'A7o': 'white', 'A6o': 'redbox', 'A5o': 'tpink', 'A4o': 'tpink', 'A3o': 'tpink', 'A2o': 'tpink', 'KQo': 'tyellow', 'KJo': 'lgreen', 'KTo': 'lblue', 'K9o': 'white', 'K8o': 'tpink', 'K7o': 'tpink', 'K6o': 'tpink', 'K5o': 'tpink', 'K4o': 'fold', 'K3o': 'fold', 'K2o': 'fold', 'QJo': 'lgreen', 'QTo': 'white', 'Q9o': 'white', 'Q8o': 'tpink', 'Q7o': 'tpink', 'Q6o': 'fold', 'Q5o': 'fold', 'Q4o': 'fold', 'Q3o': 'fold', 'Q2o': 'fold', 'JTo': 'lblue', 'J9o': 'white', 'J8o': 'tpink', 'J7o': 'fold', 'J6o': 'fold', 'J5o': 'fold', 'J4o': 'fold', 'J3o': 'fold', 'J2o': 'fold', 'T9o': 'white', 'T8o': 'tpink', 'T7o': 'fold', 'T6o': 'fold', 'T5o': 'fold', 'T4o': 'fold', 'T3o': 'fold', 'T2o': 'fold', '98o': 'redbox', '97o': 'fold', '96o': 'fold', '95o': 'fold', '94o': 'fold', '93o': 'fold', '92o': 'fold', '87o': 'fold', '86o': 'fold', '85o': 'fold', '84o': 'fold', '83o': 'fold', '82o': 'fold', '76o': 'fold', '75o': 'fold', '74o': 'fold', '73o': 'fold', '72o': 'fold', '65o': 'fold', '64o': 'fold', '63o': 'fold', '62o': 'fold', '54o': 'fold', '53o': 'fold', '52o': 'fold', '43o': 'fold', '42o': 'fold', '32o': 'fold'};
@@ -386,7 +406,13 @@ function setMode(mode,btn){
   sessionCorrect=0; sessionWrong=0; sessionRound=1;
   document.getElementById('s-correct').textContent='0';
   document.getElementById('s-wrong').textContent='0';
+  document.getElementById('s-wrong').style.color='#c9a84c';
+  document.getElementById('st-wrong').style.color='var(--gold)';
   document.getElementById('s-round').textContent='1';
+  // 成績タブが開いていれば即再描画
+  if(document.getElementById('tab-stats').style.display==='block'){
+    renderStats();
+  }
   // レンジ表タブが開いていれば即再描画
   buildRangeLegend();
   if(document.getElementById('tab-range').style.display==='block'){
@@ -397,30 +423,47 @@ function setMode(mode,btn){
   nextHand();
 }
 
-function getCorrectAction(handColor, afterCount, raiser){
-  const handRank = colorRank[handColor]||8;
-  // BBシナリオ（コール/フォールド）
+// レイザーポジションの「レイズ基準ランク」を返す（実際の卓のseatsを使う）
+function getRaiserThreshold(raiser, mode, seats){
+  const s=seats||['UTG','UTG+1','UTG+2','LJ','HJ','CO','BTN','SB','BB'];
+  const raiserAfter=getAfter(s,raiser);
+  const thMap=mode==='tourn'?posThresholdT:posThreshold;
+  return thMap[Math.min(raiserAfter,8)]||1;
+}
+
+function getCorrectAction(handColor, afterCount, raiser, myPos, seats){
+  const handRank = colorRank[handColor]||9;
+
   if(raiser){
-    // COのレイズ: 白(6番)以上でコール
-    // BTNのレイズ: ピンク枠(7番)以上でコール（本の記載通り）
-    const bbThreshold = raiser==='BTN' ? 7 : 6;
-    return handRank <= bbThreshold ? 'call' : 'fold';
+    const raiserThreshold = getRaiserThreshold(raiser, gameMode, seats);
+    const diff = raiserThreshold - handRank; // 正=自分が強い
+    if(diff >= 2) return myPos==='BB' ? '4bet' : '3bet';
+    if(diff >= 1) return 'call';
+    // BBかつBTNレイズの特例：赤枠（リング）／桃（トーナメント）までコールOK
+    if(myPos==='BB' && raiser==='BTN'){
+      const bbCallColor = gameMode==='tourn' ? 'tpink' : 'redbox';
+      const bbCallRank = colorRank[bbCallColor];
+      if(handRank <= bbCallRank) return 'call';
+    }
+    return 'fold';
   }
-  // オープン: 基準色以上ならレイズ、未満はフォールド
+
+  // オープン：自分のポジション色以上→3ベット（オープンレイズ）、未満→フォールド
   const thMap = gameMode==='tourn' ? posThresholdT : posThreshold;
   const threshold = thMap[Math.min(afterCount,8)]||1;
-  return handRank <= threshold ? 'raise' : 'fold';
+  return handRank <= threshold ? '3bet' : 'fold';
 }
 
 // 後方互換用（レンジ表では使わない）
 function colorToAction(color){if(['purple','red'].includes(color))return'raise';if(['yellow','lgreen','lblue','white','redbox'].includes(color))return'call';return'fold';}
 const rangeMap=Object.fromEntries(Object.entries(rangeColor).map(([k,v])=>[k,colorToAction(v)]));
-const actionLabel={raise:'レイズ',call:'コール',fold:'フォールド'};
-const actionClass={raise:'action-raise',call:'action-call',fold:'action-fold'};
+const actionLabel={fold:'フォールド',call:'コール','3bet':'3ベット','4bet':'4ベット'};
+const actionClass={fold:'action-fold',call:'action-call','3bet':'action-raise','4bet':'action-raise'};
 const actionMessages={
-  raise:['同色以上！オープンレイズ','イニシアチブを取りましょう','強いハンドです'],
-  call:['基準より1ランク上！コールで参加','相手レイズにコール圏内','セットアップを狙える'],
-  fold:['このハンドは捨て時','次のハンドに集中','ムダな出血を防ごう'],
+  '3bet':['オープンレイズ！イニシアチブを取ろう','強いハンドでアグレッシブに','3ベットでプレッシャーをかけよう'],
+  'call':['コール圏内、フロップへ','フラットコールで様子を見よう','ポジションを活かしてコール'],
+  'fold':['このハンドは捨て時','次のハンドに集中','ムダな出血を防ごう'],
+  '4bet':['BBから4ベット！','最強ハンド、4ベットで圧力を','BBの特権で4ベット'],
 };
 
 function getSK(){ return 'preflop_dojo_v2_'+gameMode; }
@@ -472,7 +515,13 @@ function renderPlayers(pos){
   var s='';
   s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="#1a3a2a" stroke="rgba(201,168,76,0.4)" stroke-width="2"/>';
   s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(rx-8)+'" ry="'+(ry-5)+'" fill="none" stroke="rgba(201,168,76,0.12)" stroke-width="1"/>';
-  s+='<text x="'+cx+'" y="'+(cy+3)+'" font-family="Georgia,serif" font-size="7" fill="rgba(201,168,76,0.25)" text-anchor="middle" letter-spacing="3">PREFLOP</text>';
+  if(pos.raiser){
+    s+='<text x="'+cx+'" y="'+(cy-6)+'" font-family="Georgia,serif" font-size="8" fill="rgba(220,100,100,0.9)" text-anchor="middle" letter-spacing="1">vs RAISE</text>';
+    s+='<text x="'+cx+'" y="'+(cy+7)+'" font-family="Georgia,serif" font-size="11" font-weight="700" fill="rgba(220,100,100,0.95)" text-anchor="middle">'+pos.raiser+'</text>';
+  } else {
+    s+='<text x="'+cx+'" y="'+(cy-4)+'" font-family="Georgia,serif" font-size="7" fill="rgba(201,168,76,0.4)" text-anchor="middle" letter-spacing="3">PREFLOP</text>';
+    s+='<text x="'+cx+'" y="'+(cy+8)+'" font-family="Georgia,serif" font-size="10" font-weight="700" fill="rgba(201,168,76,0.7)" text-anchor="middle" letter-spacing="2">OPEN</text>';
+  }
 
   // SB/BBチップ（テーブル内側）
   seats.forEach(function(name,i){
@@ -512,13 +561,16 @@ function renderPlayers(pos){
     const cpy=Math.max(SR+2, Math.min(H-SR-14, py));
     const isBtn=name==='BTN';
     const isBehind=actOrder.indexOf(name)>myActIdx;
+    const isRaiser=pos.raiser&&name===pos.raiser;
     const fs=name.length>3?4:5.5;
-    const fillC=isBehind?'rgba(201,168,76,0.2)':'rgba(255,255,255,0.1)';
-    const strokeC=isBehind?'rgba(201,168,76,0.7)':'rgba(255,255,255,0.25)';
-    s+='<circle cx="'+cpx.toFixed(1)+'" cy="'+cpy.toFixed(1)+'" r="'+SR+'" fill="'+fillC+'" stroke="'+strokeC+'" stroke-width="'+(isBehind?2:1.5)+'"/>';
-    s+='<text x="'+cpx.toFixed(1)+'" y="'+(cpy+2.5).toFixed(1)+'" font-family="monospace" font-size="'+fs+'" font-weight="700" fill="rgba(255,255,255,0.85)" text-anchor="middle">'+name+'</text>';
-    if(isBtn){
-      // Dは内側チップで表示するので外側は不要
+    const fillC=isRaiser?'rgba(220,80,80,0.35)':isBehind?'rgba(201,168,76,0.2)':'rgba(255,255,255,0.1)';
+    const strokeC=isRaiser?'rgba(220,80,80,0.9)':isBehind?'rgba(201,168,76,0.7)':'rgba(255,255,255,0.25)';
+    const strokeW=isRaiser?2.5:isBehind?2:1.5;
+    s+='<circle cx="'+cpx.toFixed(1)+'" cy="'+cpy.toFixed(1)+'" r="'+SR+'" fill="'+fillC+'" stroke="'+strokeC+'" stroke-width="'+strokeW+'"/>';
+    s+='<text x="'+cpx.toFixed(1)+'" y="'+(cpy+2.5).toFixed(1)+'" font-family="monospace" font-size="'+fs+'" font-weight="700" fill="'+(isRaiser?'rgba(255,180,180,0.95)':'rgba(255,255,255,0.85)')+'" text-anchor="middle">'+name+'</text>';
+    if(isRaiser){
+      // レイザーマーク（R）
+      s+='<text x="'+cpx.toFixed(1)+'" y="'+(cpy-SR-2).toFixed(1)+'" font-family="monospace" font-size="5" font-weight="700" fill="rgba(220,100,100,0.9)" text-anchor="middle">R</text>';
     }
   });
 
@@ -555,18 +607,15 @@ function nextHand(){
   const pos=randomPos();
   currentPos=pos;
   const hColor=(gameMode==='tourn'?tournRangeColor:rangeColor)[key]||'fold';
-  currentAnswer=getCorrectAction(hColor, pos.after, pos.raiser||null);
+  currentAnswer=getCorrectAction(hColor, pos.after, pos.raiser||null, pos.name, pos.seats);
   document.getElementById('pos-after').textContent=pos.after+'人';
   if(pos.raiser){
-    document.getElementById('pos-name').textContent=pos.raiser+'がレイズ　あなたはBB　'+pos.tableSize+'人卓';
+    document.getElementById('pos-name').textContent=pos.raiser+'がレイズ　あなた：'+pos.name+'　'+pos.tableSize+'人卓';
   } else {
     document.getElementById('pos-name').textContent='ポジション：'+pos.name+'　'+pos.tableSize+'人卓';
   }
-  // ボタン切り替え
-  const isBB=!!(pos.raiser);
-  document.getElementById('btn-raise').style.display=isBB?'none':'';
-  document.getElementById('btn-call').style.display=isBB?'':'none';
-  document.getElementById('btn-fold').style.display='';
+  // ボタンは常に4択固定
+  document.getElementById('action-area').style.gridTemplateColumns='1fr 1fr';
   renderPlayers(pos);
   document.getElementById('cards-area').innerHTML=renderCard(c1)+renderCard(c2);
   const[lbl,cls]=handLabel(key);
@@ -579,7 +628,7 @@ function choose(action){
   if(answered)return;
   answered=true;
   document.querySelectorAll('.action-btn').forEach(b=>b.disabled=true);
-  document.querySelector(`.btn-${action}`).classList.add('selected');
+  document.querySelector(`#btn-${action}`).classList.add('selected');
   const isCorrect=action===currentAnswer;
   checkToday();
   if(isCorrect){sessionCorrect++;stats.correct++;stats.total++;stats.streak++;stats.todayCorrect++;stats.todayTotal++;if(stats.streak>stats.best)stats.best=stats.streak;}
@@ -587,6 +636,7 @@ function choose(action){
   saveStats();
   document.getElementById('s-correct').textContent=sessionCorrect;
   document.getElementById('s-wrong').textContent=sessionWrong;
+  document.getElementById('s-wrong').style.color=sessionWrong>0?'var(--wrong)':'#c9a84c';
   const ra=document.getElementById('result-area');
   ra.className='result-area '+(isCorrect?'correct':'wrong');
   document.getElementById('result-icon').textContent=isCorrect?'◎':'✗';
@@ -597,26 +647,68 @@ function choose(action){
   ra2.textContent=actionLabel[currentAnswer];
   const handType=getHandType(currentHand);
   let hintMsg='';
-  if(handType==='pair') hintMsg='ポケットペアは強い！';
-  else if(handType==='suited'){
-    hintMsg=currentAnswer==='raise'?'スーテッドの強ハンド、レイズ！':'スーテッドでもポジション次第でフォールド';
+  const pairRaise=['ポケットペア！積極的に攻めよう','セットを狙え！','ペアの強さを活かせ'];
+  const pairFold=['小さいペアはポジション次第','UTGでの小ペアは我慢','スタックが深ければ…ここは辛抱'];
+  const suitedRaise=['スーテッドの強ハンド、レイズ！','同スートの強みを活かせ','フラッシュドローも狙える'];
+  const suitedFold=['スーテッドでもポジション次第','スーテッドは広めだが限界あり','ポジションが正義！ここは我慢'];
+  const offsuitRaise=['オフスーツだが十分強いハンド','参加するならレイズ','強いハンドでイニシアチブを'];
+  const offsuitFold=['オフスーツは厳しめに絞るのが基本','ムダな出血を防ごう','次のハンドに集中'];
+  const bbMsg=['BBの特権を活かせ！','コスト1bb安い優位性がある','BBのポジションを理解しよう'];
+  const r=Math.floor;
+  // アドバイスメッセージ
+  const hintMsgs={
+    '3bet': {
+      pair:['ポケットペア！オープンレイズ','セットを狙え！','ペアでイニシアチブを'],
+      suited:['スーテッドで3ベット！','同スートの強みを活かせ','フラッシュドローも狙える'],
+      offsuit:['強いオフスーツ、レイズ！','参加するなら3ベット','イニシアチブを取れ'],
+      vsraise:['レイザーより2ランク以上上！','3ベットでプレッシャーを','相手のレンジに勝っている'],
+    },
+    'call':{
+      any:['コール圏内、フロップへ','フラットコールで様子を見よう','ポジションを活かしてコール'],
+    },
+    'fold':{
+      pair:['小さいペアはポジション次第','UTGでの小ペアは辛抱','次のハンドに集中'],
+      suited:['スーテッドでもポジション次第','ポジションが正義！ここは我慢','次のハンドに集中'],
+      offsuit:['オフスーツは厳しめに絞るのが基本','ムダな出血を防ごう','次のハンドに集中'],
+      vsraise:['相手のレンジに負けている','ここは我慢してフォールド','コール範囲外、潔く降りよう'],
+    },
+    '4bet':{
+      any:['BBから4ベット！最強ハンド','BBの特権で4ベットサイズ','BBなので4倍サイズで3ベット'],
+    },
+  };
+  let hint='';
+  const isVsRaise=!!(currentPos&&currentPos.raiser);
+  if(currentAnswer==='4bet'){
+    const m=hintMsgs['4bet'].any; hint=m[r(Math.random()*m.length)];
+  } else if(currentAnswer==='call'){
+    const m=hintMsgs['call'].any; hint=m[r(Math.random()*m.length)];
+  } else if(currentAnswer==='3bet'){
+    const key=isVsRaise?'vsraise':handType;
+    const m=hintMsgs['3bet'][key]||hintMsgs['3bet'].offsuit; hint=m[r(Math.random()*m.length)];
   } else {
-    hintMsg=currentAnswer==='raise'?'オフスーツだが十分強いハンド':'オフスーツは厳しめに絞るのが基本';
+    const key=isVsRaise?'vsraise':handType;
+    const m=hintMsgs['fold'][key]||hintMsgs['fold'].offsuit; hint=m[r(Math.random()*m.length)];
   }
-  document.getElementById('range-hint').textContent=hintMsg;
-  const hColor=rangeColor[currentHand]||'fold';
-  const hRank=colorRank[hColor]||8;
-  const colorNames={purple:'紫',red:'赤',yellow:'黄',lgreen:'薄緑',lblue:'薄青',white:'白',redbox:'赤枠',fold:'フォールド'};
+  document.getElementById('range-hint').textContent=hint;
+
   const colorLabel={purple:'紫',red:'赤',yellow:'黄',tyellow:'黄(弱)',lgreen:'緑',lblue:'水色',white:'白',tpink:'桃',redbox:'ピンク枠',fold:'フォールド'};
+  const hColor=(gameMode==='tourn'?tournRangeColor:rangeColor)[currentHand]||'fold';
   const thMap2=gameMode==='tourn'?posThresholdT:posThreshold;
   const thr2=thMap2[Math.min(currentPos.after,8)]||1;
   const maxRank=gameMode==='tourn'?9:8;
   const hRankAdj=gameMode==='tourn'?colorRank[hColor]||9:(colorRank[hColor]<=8?colorRank[hColor]:8);
   const probMap=gameMode==='tourn'?tournProb:ringProb;
   const prob=probMap[hColor]||0;
-  if(currentPos.raiser){
-    const bbThr=currentPos.raiser==='BTN'?(gameMode==='tourn'?8:7):(gameMode==='tourn'?6:6);
-    document.getElementById('strength-hint').textContent=colorLabel[hColor]+' '+hRankAdj+'/'+maxRank+'番目（'+prob+'%）/ BB基準: '+bbThr+'番（'+currentPos.raiser+'レイズ）';
+  if(isVsRaise){
+    const raiserThr=getRaiserThreshold(currentPos.raiser, gameMode, currentPos.seats);
+    let hintTxt=colorLabel[hColor]+' '+hRankAdj+'/'+maxRank+'番目（'+prob+'%）'
+      +' / '+currentPos.raiser+'基準: '+raiserThr+'番　コール: '+(raiserThr-1)+'番　4ベット: '+(raiserThr-2)+'番以上';
+    if(currentPos.name==='BB' && currentPos.raiser==='BTN'){
+      const bbCallColor=gameMode==='tourn'?'tpink':'redbox';
+      const bbCallLabel=gameMode==='tourn'?'桃':'赤枠';
+      hintTxt+='　BB特例: '+bbCallLabel+'までコールOK';
+    }
+    document.getElementById('strength-hint').textContent=hintTxt;
   } else {
     document.getElementById('strength-hint').textContent=colorLabel[hColor]+' '+hRankAdj+'/'+maxRank+'番目（'+prob+'%）/ 基準: '+thr2+'番';
   }
@@ -649,6 +741,7 @@ function renderStats(){
   document.getElementById('st-total').textContent=t;
   document.getElementById('st-correct').textContent=c;
   document.getElementById('st-wrong').textContent=stats.wrong;
+  document.getElementById('st-wrong').style.color=stats.wrong>0?'var(--wrong)':'var(--gold)';
   document.getElementById('st-pct').textContent=t>0?pct+'%':'—';
   document.getElementById('pct-bar').style.width=pct+'%';
   document.getElementById('td-total').textContent=stats.todayTotal;
@@ -658,9 +751,12 @@ function renderStats(){
 }
 
 function resetStats(){
-  if(!confirm('成績をリセットしますか？'))return;
   stats={total:0,correct:0,wrong:0,streak:0,best:0,todayDate:'',todayTotal:0,todayCorrect:0};
   saveStats();renderStats();
+  sessionCorrect=0;sessionWrong=0;sessionRound=1;
+  document.getElementById('s-correct').textContent='0';
+  document.getElementById('s-wrong').textContent='0';
+  document.getElementById('s-round').textContent='1';
 }
 
 let rangeTblBuilt=false;
