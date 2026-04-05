@@ -463,10 +463,6 @@ body {
 
     <!-- PREFLOP GAME -->
     <div id="game-preflop" class="hidden">
-      <div class="back-row">
-        <button class="back-btn" onclick="backToMenu()">ゲーム選択</button>
-        <span class="game-title-label">プリフロップ</span>
-      </div>
       <div class="inner-tab-bar">
         <button class="inner-tab-btn active" onclick="showInnerTab('preflop','game',this)">ゲーム</button>
         <button class="inner-tab-btn" onclick="showInnerTab('preflop','stats',this)">成績</button>
@@ -526,10 +522,6 @@ body {
 
     <!-- CHIP GAME -->
     <div id="game-chip" class="hidden">
-      <div class="back-row">
-        <button class="back-btn" onclick="backToMenu()">ゲーム選択</button>
-        <span class="game-title-label">チップカウント</span>
-      </div>
       <div class="inner-tab-bar">
         <button class="inner-tab-btn active" onclick="showInnerTab('chip','game',this)">ゲーム</button>
         <button class="inner-tab-btn" onclick="showInnerTab('chip','stats',this)">成績</button>
@@ -603,10 +595,6 @@ body {
 
     <!-- SHOWDOWN GAME -->
     <div id="game-showdown" class="hidden">
-      <div class="back-row">
-        <button class="back-btn" onclick="backToMenu()">ゲーム選択</button>
-        <span class="game-title-label">役判定</span>
-      </div>
       <div class="inner-tab-bar">
         <button class="inner-tab-btn active" onclick="showInnerTab('showdown','game',this)">ゲーム</button>
         <button class="inner-tab-btn" onclick="showInnerTab('showdown','stats',this)">成績</button>
@@ -785,6 +773,10 @@ function showTopTab(tab,btn){
   document.querySelectorAll('.top-tab-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   ['select','allstats','ref'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('hidden',t!==tab));
+  if(tab==='select'){
+    // ゲーム選択タブに戻るときは常にメニューに戻す
+    backToMenu();
+  }
   if(tab==='allstats')renderAllStats();
   if(tab==='ref'){buildRefLegend('ring');buildRangeTable('ref','ring');buildHandRankRef('ref-hand-rank-ref');}
 }
